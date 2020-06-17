@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LogInRepository {
 
@@ -30,6 +31,14 @@ class LogInRepository {
     print(response.statusCode.toString());
     if (response.statusCode == 200) {
       print(response.body.toString());
+
+      Map<String, dynamic> jsonResponse = json.decode(response.body);
+      var token = jsonResponse['access_token'];
+      print(token);
+
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      await preferences.setString('token', token);
+
       return true;
     } else {
       print(response.body.toString());

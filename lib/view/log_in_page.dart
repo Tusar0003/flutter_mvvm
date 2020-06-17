@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -27,7 +28,7 @@ class _LogInPageState extends State<LogInPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   bool _isProgressDialogShown = false;
-  bool _goToHome = false;
+//  bool _goToHome = false;
 
   @override
   void initState() {
@@ -159,20 +160,17 @@ class _LogInPageState extends State<LogInPage> {
 //    );
 
     final ProgressDialog progressDialog = ProgressDialog(context);
-    var isLoggedIn = Provider.of<LogInViewModel>(context).isLoggedIn;
-    var error = Provider.of<LogInViewModel>(context).error;
+    var isLoggedIn = logInViewModel.isLoggedIn;
+    var error = logInViewModel.error;
+//    var isLoggedIn = Provider.of<LogInViewModel>(context).isLoggedIn;
+//    var error = Provider.of<LogInViewModel>(context).error;
 
     if (isLoggedIn) {
-      print('if');
-//      progressDialog.hide();
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+      progressDialog.hide();
+//      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+      return HomePage();
     } else {
-      setState(() {
-        _goToHome = true;
-      });
-      print('else');
-//      progressDialog.hide();
-//      hideProgressBar();
+      progressDialog.hide();
     }
 
     if (error != null) {
@@ -274,16 +272,9 @@ class _LogInPageState extends State<LogInPage> {
                     } else if (_passwordController.value.text.isEmpty) {
                       showToast(true, 'Password is empty!');
                     } else {
-//                      showAlertDialog('title', 'message');
-//                      showCustomProgressDialog();
-//                      showProgressDialog(context);
-                      logInViewModel.logIn(_userNameController.text, _passwordController.text);
                       progressDialog.show();
-                      if (_goToHome) {
-                        progressDialog.hide().then((onValue) {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-                        });
-                      }
+                      logInViewModel.logIn(_userNameController.text, _passwordController.text);
+//                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
                     }
                   },
                   color: Colors.blue,
@@ -296,7 +287,7 @@ class _LogInPageState extends State<LogInPage> {
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
