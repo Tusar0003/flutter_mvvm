@@ -19,29 +19,34 @@ class LogInRepository {
       'password': password
     };
 
-    final response = await http.post(
-      _baseUrl + 'oauth/token',
-      headers: <String, String> {
-        'Authorization': clientKey,
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: params
-    );
+    try {
+      final response = await http.post(
+          _baseUrl + 'oauth/token',
+          headers: <String, String> {
+            'Authorization': clientKey,
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: params
+      );
 
-    print(response.statusCode.toString());
-    if (response.statusCode == 200) {
-      print(response.body.toString());
+      print(response.statusCode.toString());
+      if (response.statusCode == 200) {
+        print(response.body.toString());
 
-      Map<String, dynamic> jsonResponse = json.decode(response.body);
-      var token = jsonResponse['access_token'];
-      print(token);
+        Map<String, dynamic> jsonResponse = json.decode(response.body);
+        var token = jsonResponse['access_token'];
+        print(token);
 
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      await preferences.setString('token', token);
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        await preferences.setString('token', token);
 
-      return true;
-    } else {
-      print(response.body.toString());
+        return true;
+      } else {
+        print(response.body.toString());
+        return false;
+      }
+    } catch(exception) {
+      print(exception.toString());
       return false;
     }
 

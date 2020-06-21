@@ -1,5 +1,36 @@
-class StudentReport {
+import 'package:json_annotation/json_annotation.dart';
 
+class StudentReportResponse {
+
+  String message;
+  int msgType;
+  List<Item> item;
+
+  StudentReportResponse({this.message, this.msgType, this.item});
+
+  StudentReportResponse.fromJson(Map<String, dynamic> json) {
+    message = json['message'];
+    msgType = json['msgType'];
+    if (json['item'] != null) {
+      item = new List<Item>();
+      json['item'].forEach((v) {
+        item.add(new Item.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['message'] = this.message;
+    data['msgType'] = this.msgType;
+    if (this.item != null) {
+      data['item'] = this.item.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Item {
   String studentId;
   String customStudentId;
   String studentName;
@@ -52,7 +83,7 @@ class StudentReport {
   Null studentMobile;
   Null fullImagePath;
 
-  StudentReport(
+  Item(
       {this.studentId,
         this.customStudentId,
         this.studentName,
@@ -105,7 +136,7 @@ class StudentReport {
         this.studentMobile,
         this.fullImagePath});
 
-  StudentReport.fromJson(Map<String, dynamic> json) {
+  Item.fromJson(Map<String, dynamic> json) {
     studentId = json['studentId'];
     customStudentId = json['customStudentId'];
     studentName = json['studentName'];

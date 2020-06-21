@@ -170,6 +170,7 @@ class _LogInPageState extends State<LogInPage> {
 //      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
       return HomePage();
     } else {
+      print('else');
       progressDialog.hide();
     }
 
