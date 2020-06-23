@@ -20,7 +20,7 @@ class LogInViewModel extends ChangeNotifier {
   bool get isLoggedIn => _isLoggedIn;
   String get error => _error;
 
-//  set isSuccess(bool value) {
-//    _isSuccess = value;
-//  }
+  set setIsLoggedIn(bool value) {
+    _isLoggedIn = value;
+  }
 }

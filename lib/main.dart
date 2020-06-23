@@ -50,7 +50,12 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: LogInPage(),
+//          home: LogInPage(),
+          initialRoute: '/',
+          routes: {
+            '/': (context) => LogInPage(),
+            '/Home': (context) => HomePage()
+          },
         ),
     );
   }

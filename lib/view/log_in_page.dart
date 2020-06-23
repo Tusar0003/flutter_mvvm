@@ -168,6 +168,8 @@ class _LogInPageState extends State<LogInPage> {
     if (isLoggedIn) {
       progressDialog.hide();
 //      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+//      Navigator.pushNamed(context, '/Home');
+      logInViewModel.setIsLoggedIn = false;
       return HomePage();
     } else {
       print('else');
@@ -179,155 +181,126 @@ class _LogInPageState extends State<LogInPage> {
     }
 
     // TODO: implement build
-    return Scaffold(
-      body: Center(
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/blue_gradient.jpg'),
-              fit: BoxFit.fill,
-            ),
+    return WillPopScope(
+      onWillPop: () {
+        SystemNavigator.pop();
+        return Future.value(false);
+      },
+      child: Scaffold(
+        body: Center(
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/blue_gradient.jpg'),
+                fit: BoxFit.fill,
+              ),
 //            shape: BoxShape.circle,
-          ),
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'Log In',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                  textStyle: TextStyle(
-                    fontSize: 50.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600
-                  )
-                ),
+            ),
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'Log In',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                      textStyle: TextStyle(
+                          fontSize: 50.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600
+                      )
+                  ),
 //                style: TextStyle(
 //                  fontSize: 50.0,
 //                  color: Colors.black,
 //                  fontWeight: FontWeight.bold
 //                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 20.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.black
-                  ),
-                  borderRadius: BorderRadius.circular(5.0)
                 ),
-                child: TextField(
-                  controller: _userNameController,
-                  style: TextStyle(
-                    color: Colors.black,
+                Container(
+                  margin: EdgeInsets.only(top: 20.0),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                          width: 1,
+                          color: Colors.black
+                      ),
+                      borderRadius: BorderRadius.circular(5.0)
                   ),
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.person),
-//                    contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 8.0),
-                    hintText: 'User name',
-                    hintStyle: TextStyle(
-                      color: Colors.grey,
-                    ),
-                    border: InputBorder.none
-                  ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 10.0, bottom: 20.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                      width: 1,
-                      color: Colors.black
-                  ),
-                  borderRadius: BorderRadius.circular(5.0)
-                ),
-                child: TextField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                  decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.lock),
-//                    contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 8.0),
-                    hintText: 'Password',
-                    hintStyle: TextStyle(
-                      color: Colors.grey,
-                    ),
-                    border: InputBorder.none
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                height: 40.0,
-                child: RaisedButton(
-                  onPressed: () {
-                    if (_userNameController.value.text.isEmpty) {
-                      showToast(true, 'User name is empty!');
-                    } else if (_passwordController.value.text.isEmpty) {
-                      showToast(true, 'Password is empty!');
-                    } else {
-                      progressDialog.show();
-                      logInViewModel.logIn(_userNameController.text, _passwordController.text);
-//                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-                    }
-                  },
-                  color: Colors.blue,
-                  child: Text(
-                    'Log In',
-                    textAlign: TextAlign.center,
+                  child: TextField(
+                    controller: _userNameController,
                     style: TextStyle(
-                      fontSize: 15.0,
-                      color: Colors.white
+                      color: Colors.black,
+                    ),
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.person),
+//                    contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 8.0),
+                        hintText: 'User name',
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        border: InputBorder.none
                     ),
                   ),
                 ),
-              ),
-            ],
+                Container(
+                  margin: EdgeInsets.only(top: 10.0, bottom: 20.0),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                          width: 1,
+                          color: Colors.black
+                      ),
+                      borderRadius: BorderRadius.circular(5.0)
+                  ),
+                  child: TextField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.lock),
+//                    contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 8.0),
+                        hintText: 'Password',
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        border: InputBorder.none
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 40.0,
+                  child: RaisedButton(
+                    onPressed: () {
+                      if (_userNameController.value.text.isEmpty) {
+                        showToast(true, 'User name is empty!');
+                      } else if (_passwordController.value.text.isEmpty) {
+                        showToast(true, 'Password is empty!');
+                      } else {
+                        progressDialog.show();
+                        logInViewModel.logIn(_userNameController.text, _passwordController.text);
+//                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                      }
+                    },
+                    color: Colors.blue,
+                    child: Text(
+                      'Log In',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.white
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    );
-  }
-
-  showAlertDialog(String title, String message) {
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-
-    Widget continueButton = FlatButton(
-      child: Text("Ok"),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alertDialog = AlertDialog(
-      title: Text(title),
-      content: Text(message),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alertDialog;
-      },
     );
   }
 }
