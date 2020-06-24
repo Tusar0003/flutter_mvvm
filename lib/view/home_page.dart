@@ -15,11 +15,79 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const List<Widget> _widgetOptions = <Widget>[
+    Text(
+      'Index 0: Home',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 1: Business',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 2: School',
+      style: optionStyle,
+    ),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (_selectedIndex) {
+      case 1:
+        Navigator.pushNamed(context, '/Demo');
+        break;
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     Provider.of<HomeViewModel>(context, listen: false).getStudentReport();
+  }
+
+  showAlertDialog(String title, String message) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("No"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    Widget continueButton = FlatButton(
+      child: Text("Yes"),
+      onPressed: () {
+//          Navigator.pop(context);
+//          Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+//          _logOut(true);
+        Navigator.pushNamed(context, '/');
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alertDialog = AlertDialog(
+      title: Text(title),
+      content: Text(message),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alertDialog;
+      },
+    );
   }
 
   @override
@@ -54,6 +122,7 @@ class _HomePageState extends State<HomePage> {
       switch (choice.title.toLowerCase()) {
         case 'car':
           print(choice.title);
+          Navigator.pushNamed(context, '/Demo');
           break;
         case 'bicycle':
           print(choice.title);
@@ -72,48 +141,9 @@ class _HomePageState extends State<HomePage> {
           break;
         case 'log out':
           print(choice.title);
-//          Navigator.pop(context);
-          Navigator.push(context, MaterialPageRoute(builder: (context) => LogInPage()));
+          showAlertDialog('Log Out', 'Do you want to log out?');
           break;
       }
-    }
-
-    showAlertDialog(String title, String message) {
-      // set up the buttons
-      Widget cancelButton = FlatButton(
-        child: Text("No"),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      );
-
-      Widget continueButton = FlatButton(
-        child: Text("Yes"),
-        onPressed: () {
-//          Navigator.pop(context);
-//          Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-//          _logOut(true);
-          Navigator.pushNamed(context, '/');
-        },
-      );
-
-      // set up the AlertDialog
-      AlertDialog alertDialog = AlertDialog(
-        title: Text(title),
-        content: Text(message),
-        actions: [
-          cancelButton,
-          continueButton,
-        ],
-      );
-
-      // show the dialog
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alertDialog;
-        },
-      );
     }
 
     // TODO: implement build
@@ -122,16 +152,13 @@ class _HomePageState extends State<HomePage> {
 //        Navigator.pop(context, true);
 //        SystemNavigator.pop();
         showAlertDialog('Log Out', 'Do you want to log out?');
-//        Navigator.pop(context);
-//        _isLogOut = true;
-//        Navigator.pushNamed(context, '/');
         return Future.value(true);
       },
 //      onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(
           title: Text('Home'),
-          automaticallyImplyLeading: false, // Hiding back button
+//          automaticallyImplyLeading: false, // Hiding back button
           actions: <Widget>[
             // action button
             IconButton(
@@ -168,7 +195,53 @@ class _HomePageState extends State<HomePage> {
               child: StudentReportList(studentReportList: homeViewModel.studentReportList),
             )
           ),
-        )
+        ),
+        drawer: Drawer(
+          child: ListView(
+            // Important: Remove any padding from the ListView.
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                child: Text('Drawer Header'),
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+              ),
+              ListTile(
+                title: Text('Item 1'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/Demo');
+                },
+              ),
+              ListTile(
+                title: Text('Item 2'),
+                onTap: () {
+                  // Update the state of the app.
+                  // ...
+                },
+              ),
+            ],
+          ),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              title: Text('Home'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.business),
+              title: Text('Business'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.school),
+              title: Text('School'),
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.blue,
+          onTap: _onItemTapped,
+        ),
       )
     );
   }

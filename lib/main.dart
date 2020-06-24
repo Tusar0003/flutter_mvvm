@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttermvvm/view/demo_page.dart';
 import 'package:fluttermvvm/view/home_page.dart';
 import 'package:fluttermvvm/view/log_in_page.dart';
 import 'package:fluttermvvm/viewModel/home_view_model.dart';
@@ -54,7 +55,8 @@ class MyApp extends StatelessWidget {
           initialRoute: '/',
           routes: {
             '/': (context) => LogInPage(),
-            '/Home': (context) => HomePage()
+            '/Home': (context) => HomePage(),
+            '/Demo': (context) => DemoTab()
           },
         ),
     );
